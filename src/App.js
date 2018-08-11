@@ -5,9 +5,13 @@ class App extends Component {
   render() {
     return (
       <div className="container">
-        {/*<Banner />*/}
         <Main />
-        <Nav />
+        <Nav1 />
+        <Nav2 />
+        <Nav3 />
+        <Nav4 />
+        <Nav5 />
+        <Nav6 />
         <Details />
       </div>
     );
@@ -45,30 +49,95 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis iaculis at ante ac
     );
   }
 }
-class Nav extends Component {
+class Nav1 extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      display: "CHAR"
+    }
+  }
   render() {
     return (
-      <div className="container">
-        <button className="nav-buttons nav1">
-          <h1>CHAR</h1>
-        </button>
-        <button className="nav-buttons nav2">
-          <h1>SKILL</h1>
-        </button>
-        <button className="nav-buttons nav3">
-          <h1>INV</h1>
-        </button>
-        <button className="nav-buttons nav4">
-          <h1>ABIL</h1>
-        </button>
-        <button className="nav-buttons nav5">
-          <h1>HIST</h1>
-        </button>
-        <button className="nav-buttons nav6">
-          <h1>MISC</h1>
-        </button>
-      </div>
+      <button onClick={this.click} className="nav-buttons nav1">
+        <h1>{this.state.display}</h1>
+      </button>
     );
   }
 }
+class Nav2 extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      display: "SKILL"
+    }
+  }
+  render() {
+    return (
+      <button className="nav-buttons nav2">
+        <h1>{this.state.display}</h1>
+      </button>
+    );
+  }
+}
+class Nav3 extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      display: "INV"
+    }
+  }
+  render() {
+    return (
+      <button className="nav-buttons nav3">
+        <h1>{this.state.display}</h1>
+      </button>
+    );
+  }
+}
+class Nav4 extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      display: "ABIL"
+    }
+  }
+  render() {
+    return (
+      <button className="nav-buttons nav4">
+        <h1>{this.state.display}</h1>
+      </button>
+    );
+  }
+}
+class Nav5 extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      display: "HIST"
+    }
+  }
+  render() {
+    return (
+      <button className="nav-buttons nav5">
+        <h1>{this.state.display}</h1>
+      </button>
+    );
+  }
+}
+class Nav6 extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      display: "MISC"
+    }
+  }
+  render() {
+    return (
+      <button className="nav-buttons nav6">
+        <h1>{this.state.display}</h1>
+      </button>
+    );
+  }
+}
+
 export default App;
