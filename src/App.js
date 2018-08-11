@@ -13,7 +13,7 @@ class App extends Component {
         <Nav5 />
         <Nav6 />
         <Details />
-      </div>
+      </div> 
     );
   }
 }
