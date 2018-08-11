@@ -13,7 +13,7 @@ class App extends Component {
         <Nav5 />
         <Nav6 />
         <Details />
-      </div> 
+      </div>
     );
   }
 }
@@ -32,12 +32,48 @@ class Nav1 extends Component {
     this.state = {
       display: "CHAR"
     }
+    this.click = this.click.bind(this);
+  }
+  click() {
+    if (this.state.display === "CHAR"){
+      delete this.state.display;
+      this.setState({
+        str: 12,
+        dex: 15,
+        con: 10,
+        int: 12,
+        wis: 9,
+        cha: 18
+      }, () => {
+        console.log(this.state);
+        const button = document.getElementsByClassName("nav1")[0];
+        button.innerHTML = "";
+        for (let key in this.state) {
+          let newElement = document.createElement("div");
+          newElement.textContent = this.state[key];
+          button.style.display = "grid";
+          button.appendChild(newElement);
+        }
+      });
+    }
+    else {
+      this.setState({
+        display: "CHAR"
+      }, () => {
+      const button = document.getElementsByClassName("nav1")[0];
+      button.innerHTML = "";
+      let test = document.createElement("h1");
+      test.textContent = this.state.display;
+      button.appendChild(test);
+      button.style.display = "flex";
+      });
+    }
   }
   render() {
     return (
-      <button onClick={this.click} className="nav-buttons nav1">
+      <div onClick={this.click} className="nav-buttons nav1">
         <h1>{this.state.display}</h1>
-      </button>
+      </div>
     );
   }
 }
