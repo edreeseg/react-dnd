@@ -38,21 +38,29 @@ class Nav1 extends Component {
     if (this.state.display === "CHAR"){
       delete this.state.display;
       this.setState({
-        str: 12,
-        dex: 15,
-        con: 10,
-        int: 12,
-        wis: 9,
-        cha: 18
+        STR: 12,
+        DEX: 15,
+        CON: 10,
+        INT: 12,
+        WIS: 9,
+        CHA: 18
       }, () => {
-        console.log(this.state);
         const button = document.getElementsByClassName("nav1")[0];
         button.innerHTML = "";
         for (let key in this.state) {
-          let newElement = document.createElement("div");
-          newElement.textContent = this.state[key];
+          let splitDiv = document.createElement("div");
+          let ability = document.createElement("b");
+          let block = document.createElement("p");
+          ability.textContent = key;
+          let score = this.state[key];
+          let modifier = Math.floor((score - 10) / 2);
+          let sign = modifier >= 0 ? "+" : "";
+          block.textContent = score + "\n(" + sign + modifier + ")";
           button.style.display = "grid";
-          button.appendChild(newElement);
+          button.appendChild(splitDiv);
+          splitDiv.appendChild(ability);
+          splitDiv.appendChild(block);
+
         }
       });
     }
