@@ -45,7 +45,7 @@ class Main extends Component {
   render() {
     return (
       <div className="main-content">
-        {this.state.content};
+        {this.state.content}
       </div>
     );
   }
