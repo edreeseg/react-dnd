@@ -5,6 +5,7 @@ class App extends Component {
   render() {
     return (
       <div className="container">
+        <SideBar />
         <Main />
         <Nav1 />
         <Nav2 />
@@ -17,11 +18,34 @@ class App extends Component {
     );
   }
 }
+
+class SideBar extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loggedIn: false
+    }
+  }
+  render() {
+    return (
+      <div className="sideBar">
+        <h1>?</h1>
+        <div className="arrow"></div>
+      </div>
+    );
+  }
+}
 class Main extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      content: <img class="portrait" src="https://i.imgur.com/iPyleTb.png" alt="portrait of [character name]"/>
+    };
+  }
   render() {
     return (
       <div className="main-content">
-        <img class="portrait" src="https://i.imgur.com/iPyleTb.png" alt="portrait of [character name]"/>
+        {this.state.content};
       </div>
     );
   }
@@ -61,7 +85,6 @@ class Nav1 extends Component {
           button.appendChild(splitDiv);
           splitDiv.appendChild(ability);
           splitDiv.appendChild(block);
-
         }
       });
     }
@@ -96,7 +119,7 @@ class Nav2 extends Component {
   render() {
     return (
       <div className="nav-buttons nav2">
-        <h1>{this.state.display}</h1>
+        <h2>{this.state.display}</h2>
       </div>
     );
   }
@@ -111,7 +134,7 @@ class Nav3 extends Component {
   render() {
     return (
       <div className="nav-buttons nav3">
-        <h1>{this.state.display}</h1>
+        <h2>{this.state.display}</h2>
       </div>
     );
   }
@@ -120,13 +143,14 @@ class Nav4 extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      display: "ABIL"
+      display: "PORTRAIT",
+      content: <img class="portrait" src="https://i.imgur.com/iPyleTb.png" alt="portrait of [character name]"/>
     }
   }
   render() {
     return (
       <div className="nav-buttons nav4">
-        <h1>{this.state.display}</h1>
+        <h2>{this.state.display}</h2>
       </div>
     );
   }
@@ -141,7 +165,7 @@ class Nav5 extends Component {
   render() {
     return (
       <div className="nav-buttons nav5">
-        <h1>{this.state.display}</h1>
+        <h2>{this.state.display}</h2>
       </div>
     );
   }
@@ -156,7 +180,7 @@ class Nav6 extends Component {
   render() {
     return (
       <div className="nav-buttons nav6">
-        <h1>{this.state.display}</h1>
+        <h2>{this.state.display}</h2>
       </div>
     );
   }
