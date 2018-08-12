@@ -30,12 +30,12 @@ class Nav1 extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      display: "CHAR"
+      display: "ABILITY"
     }
     this.click = this.click.bind(this);
   }
   click() {
-    if (this.state.display === "CHAR"){
+    if (this.state.display === "ABILITY"){
       delete this.state.display;
       this.setState({
         STR: 12,
@@ -55,7 +55,8 @@ class Nav1 extends Component {
           let score = this.state[key];
           let modifier = Math.floor((score - 10) / 2);
           let sign = modifier >= 0 ? "+" : "";
-          block.textContent = score + "\n(" + sign + modifier + ")";
+          let spacer = score >= 10 ? " " : "  ";
+          block.textContent = spacer + score + "\n(" + sign + modifier + ")";
           button.style.display = "grid";
           button.appendChild(splitDiv);
           splitDiv.appendChild(ability);
@@ -66,11 +67,11 @@ class Nav1 extends Component {
     }
     else {
       this.setState({
-        display: "CHAR"
+        display: "ABILITY"
       }, () => {
       const button = document.getElementsByClassName("nav1")[0];
       button.innerHTML = "";
-      let test = document.createElement("h1");
+      let test = document.createElement("h2");
       test.textContent = this.state.display;
       button.appendChild(test);
       button.style.display = "flex";
@@ -80,7 +81,7 @@ class Nav1 extends Component {
   render() {
     return (
       <div onClick={this.click} className="nav-buttons nav1">
-        <h1>{this.state.display}</h1>
+        <h2>{this.state.display}</h2>
       </div>
     );
   }
@@ -94,9 +95,9 @@ class Nav2 extends Component {
   }
   render() {
     return (
-      <button className="nav-buttons nav2">
+      <div className="nav-buttons nav2">
         <h1>{this.state.display}</h1>
-      </button>
+      </div>
     );
   }
 }
@@ -109,9 +110,9 @@ class Nav3 extends Component {
   }
   render() {
     return (
-      <button className="nav-buttons nav3">
+      <div className="nav-buttons nav3">
         <h1>{this.state.display}</h1>
-      </button>
+      </div>
     );
   }
 }
@@ -124,9 +125,9 @@ class Nav4 extends Component {
   }
   render() {
     return (
-      <button className="nav-buttons nav4">
+      <div className="nav-buttons nav4">
         <h1>{this.state.display}</h1>
-      </button>
+      </div>
     );
   }
 }
@@ -139,9 +140,9 @@ class Nav5 extends Component {
   }
   render() {
     return (
-      <button className="nav-buttons nav5">
+      <div className="nav-buttons nav5">
         <h1>{this.state.display}</h1>
-      </button>
+      </div>
     );
   }
 }
@@ -154,9 +155,9 @@ class Nav6 extends Component {
   }
   render() {
     return (
-      <button className="nav-buttons nav6">
+      <div className="nav-buttons nav6">
         <h1>{this.state.display}</h1>
-      </button>
+      </div>
     );
   }
 }
