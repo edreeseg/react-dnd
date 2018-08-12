@@ -23,14 +23,42 @@ class SideBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      active: false,
       loggedIn: false
+    }
+    this.click = this.click.bind(this);
+  }
+  click() {
+    const sideBar = document.getElementsByClassName("sideBar")[0];
+    const loginForm = document.getElementsByClassName("loginForm")[0];
+    const arrow = document.getElementsByClassName("arrow")[0];
+    if (this.state.active === false) {
+      loginForm.style.visibility = "visible";
+      sideBar.style.width = "15%";
+      arrow.style.transform = "translateX(13vw) rotate(135deg)";
+      this.setState({
+        active: true
+      });
+    } else {
+      loginForm.style.visibility = "hidden";
+      sideBar.style.width = "2%";
+      arrow.style.transform = "rotate(-45deg)";
+      this.setState({
+        active: false
+      });
     }
   }
   render() {
     return (
       <div className="sideBar">
         <h1>?</h1>
-        <div className="arrow"></div>
+        <form className="loginForm">
+          <h4>Welcome!  Login below:</h4>
+          <input type="text" placeholder="Email" className="emailLogin"></input>
+          <input type="password" placeholder="Password" className="passwordLogin"></input>
+          <button type="submit" className="loginButton">Login</button>
+        </form>
+        <div onClick={this.click} className="arrow"></div>
       </div>
     );
   }

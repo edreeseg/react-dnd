@@ -27,15 +27,27 @@ body {
   height: 100%;
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
   align-items: center;
   box-shadow: 5px 2px 20px -5px;
+  z-index: 3;
 }
 .sideBar > h1 {
   position: absolute;
   cursor: pointer;
-  top: 10%;
+  bottom: 10%;
   margin: 0;
   padding: 0;
+}
+.loginForm {
+  margin: 5% 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  visibility: hidden;
+}
+.loginForm > input {
+  margin-bottom: 1%;
 }
 .arrow {
   position: absolute;
@@ -50,20 +62,6 @@ body {
   cursor: pointer;
   transform: rotate(-45deg);
   -webkit-transform: rotate(-45deg);
-  animation-name: bounce;
-  animation-duration: 0s;
-  animation-iteration-count: infinite;
-  animation-timing-function: ease-in-out;
-}
-@keyframes bounce {
-  50% {
-    transform: translateY(-4px) rotate(-45deg);
-    -webkit-transform: translate(-4px) rotate(-45deg);
-  }
-  100% {
-    transform: translateY(0px) rotate(-45deg);
-    -webkit-transform: translateY(0px) rotate(-45deg);
-  }
 }
 .nav-buttons {
   display: flex;
