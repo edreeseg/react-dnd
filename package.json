@@ -1,6 +1,6 @@
 {
   "name": "my-app",
-  "homepage": "http://edreeseg.github.io/edreeseg.github.io",
+  "homepage": "http://edreeseg.github.io/react-dnd",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
