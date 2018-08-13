@@ -143,10 +143,38 @@ class Nav2 extends Component {
     this.state = {
       display: "SKILL"
     }
+    this.click = this.click.bind(this);
+  }
+  click() {
+    if (this.state.display === "SKILL") {
+      this.setState({
+        Acrobatics: "+2",
+        AnimalHandling: "-1",
+        Arcana: "+1",
+        Athletics: "+1",
+        Deception: "+4",
+        History: "+1",
+        Insight: "-1",
+        Intimidation: "+4",
+        Investigation: "+1",
+        Medicine: "-1",
+        Nature: "+1",
+        Perception: "-1",
+        Performance: "+4",
+        Persuasion: "+4",
+        Religion: "+1",
+        SleightOfHand: "+2",
+        Stealth: "+2",
+        Survival: "-1"
+      }, () => {
+        for (let key in this.state) {
+        }
+      });
+    }
   }
   render() {
     return (
-      <div className="nav-buttons nav2">
+      <div onClick={this.click} className="nav-buttons nav2">
         <h2>{this.state.display}</h2>
       </div>
     );
