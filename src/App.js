@@ -146,7 +146,9 @@ class Nav2 extends Component {
     this.click = this.click.bind(this);
   }
   click() {
+    const skillButton = document.getElementsByClassName("nav2")[0];
     if (this.state.display === "SKILL") {
+      delete this.state.display;
       this.setState({
         Acrobatics: "+2",
         AnimalHandling: "-1",
@@ -167,8 +169,24 @@ class Nav2 extends Component {
         Stealth: "+2",
         Survival: "-1"
       }, () => {
+        skillButton.innerHTML = "";
         for (let key in this.state) {
+          if (key === "Perception"){
+            let ppTitle = document.createElement("h4");
+            ppTitle.textContent = `Passive ${key}:\n${this.state[key]}`;
+            skillButton.appendChild(ppTitle);
+          } else {
+            console.log(`${key}: ${this.state[key]}`);
+          }
         }
+      });
+    } else {
+      let skillTitle = document.createElement("h2");
+      this.setState({display: "SKILL"}, () => {
+        skillButton.innerHTML = "";
+        skillTitle.textContent = this.state.display;
+        skillButton.appendChild(skillTitle);
+        
       });
     }
   }
