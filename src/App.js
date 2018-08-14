@@ -67,13 +67,14 @@ class Main extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      content: <img class="portrait" src="https://i.imgur.com/iPyleTb.png" alt="portrait of [character name]"/>
-    };
+    }
+    displayMainContent.roll = displayMainContent.roll.bind(this);
+    displayMainContent.skills = displayMainContent.skills.bind(this);
   }
   render() {
     return (
       <div className="main-content">
-        {this.state.content}
+        <h1>{this.state.content}</h1>
       </div>
     );
   }
@@ -143,56 +144,10 @@ class Nav2 extends Component {
     this.state = {
       display: "SKILL"
     }
-    this.click = this.click.bind(this);
-  }
-  click() {
-    const skillButton = document.getElementsByClassName("nav2")[0];
-    if (this.state.display === "SKILL") {
-      delete this.state.display;
-      this.setState({
-        Acrobatics: "+2",
-        AnimalHandling: "-1",
-        Arcana: "+1",
-        Athletics: "+1",
-        Deception: "+4",
-        History: "+1",
-        Insight: "-1",
-        Intimidation: "+4",
-        Investigation: "+1",
-        Medicine: "-1",
-        Nature: "+1",
-        Perception: "-1",
-        Performance: "+4",
-        Persuasion: "+4",
-        Religion: "+1",
-        SleightOfHand: "+2",
-        Stealth: "+2",
-        Survival: "-1"
-      }, () => {
-        skillButton.innerHTML = "";
-        for (let key in this.state) {
-          if (key === "Perception"){
-            let ppTitle = document.createElement("h4");
-            ppTitle.textContent = `Passive ${key}:\n${this.state[key]}`;
-            skillButton.appendChild(ppTitle);
-          } else {
-            console.log(`${key}: ${this.state[key]}`);
-          }
-        }
-      });
-    } else {
-      let skillTitle = document.createElement("h2");
-      this.setState({display: "SKILL"}, () => {
-        skillButton.innerHTML = "";
-        skillTitle.textContent = this.state.display;
-        skillButton.appendChild(skillTitle);
-        
-      });
-    }
   }
   render() {
     return (
-      <div onClick={this.click} className="nav-buttons nav2">
+      <div onClick={displayMainContent.skills} className="nav-buttons nav2">
         <h2>{this.state.display}</h2>
       </div>
     );
@@ -217,14 +172,13 @@ class Nav4 extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      display: "PORTRAIT",
-      content: <img class="portrait" src="https://i.imgur.com/iPyleTb.png" alt="portrait of [character name]"/>
+      display: "D20",
     }
   }
   render() {
     return (
-      <div className="nav-buttons nav4">
-        <h2>{this.state.display}</h2>
+      <div onClick={displayMainContent.roll} className="nav-buttons nav4">
+        <h1>{this.state.display}</h1>
       </div>
     );
   }
@@ -271,6 +225,82 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis iaculis at ante ac
         <p>Ut ullamcorper felis nec mi ultrices feugiat eu sit amet tortor. In ut sagittis lorem. Praesent eget egestas quam. Nunc iaculis sodales vestibulum. Mauris feugiat purus ac ultricies posuere. Nullam risus nisi, fringilla vel risus auctor, sollicitudin sollicitudin lacus. Nunc condimentum tincidunt dui vitae malesuada. Sed non odio lacus. Suspendisse eget dolor risus.</p>
       </div>
     );
+  }
+}
+
+const displayMainContent = {
+  roll: function() {
+    let mainDiv = document.getElementsByClassName("main-content")[0];
+    mainDiv.style.fontSize = "1em";
+    this.setState({
+      content: Math.floor(Math.random() * (20-1+1) + 1)
+    });
+  },
+  skills: function() {
+    let skillObj = {
+      Acrobatics: "+2",
+      AnimalHandling: "-1",
+      Arcana: "+1",
+      Athletics: "+1",
+      Deception: "+4",
+      History: "+1",
+      Insight: "-1",
+      Intimidation: "+4",
+      Investigation: "+1",
+      Medicine: "-1",
+      Nature: "+1",
+      Perception: "-1",
+      Performance: "+4",
+      Persuasion: "+4",
+      Religion: "+1",
+      SleightOfHand: "+2",
+      Stealth: "+2",
+      Survival: "-1"
+    }
+    const skillArr = [];
+    for (let key in skillObj){
+      if (key.match(/[A-Z]/g).length > 1){
+        let str = "";
+        let finalStr = "";
+        let insideWord = false;
+        for (let i = 0; i < key.length; i++){
+          if (/[A-Z]/.test(key[i]) && insideWord === true){
+            finalStr = `${finalStr}${str} `;
+            str = key[i];
+            insideWord = false;
+          } else if (i === key.length - 1) {
+            finalStr = `${finalStr}${str}${key[i]}: ${skillObj[key]}`;
+            skillArr.push(finalStr);
+          } else {
+            insideWord = true;
+            str += key[i];
+          }
+        }
+      } else {
+      skillArr.push(`${key}: ${skillObj[key]}`)
+      }
+    }
+      const mainDiv = document.getElementsByClassName("main-content")[0];
+      const skillButton = document.getElementsByClassName("nav2")[0];
+      skillButton.innerHTML = "";
+      if (!this.state.hasOwnProperty("content")){
+        this.setState({
+          content: skillArr.join("\n")
+        }, () => {
+          mainDiv.style.fontSize = "0.12em";
+        });
+        const perIndex = skillArr.findIndex(x => /Perception/.test(x));
+        const passivePerception = document.createElement("h4");
+        passivePerception.textContent = `Passive ${skillArr[perIndex]}`;
+        skillButton.appendChild(passivePerception);
+      } else {
+        this.setState({});
+        const skillTitle = document.createElement("h2");
+        skillTitle.textContent = "SKILL";
+        skillButton.appendChild(skillTitle);
+        for (let key in this.state)
+          delete this.state[key];
+      }
   }
 }
 export default App;

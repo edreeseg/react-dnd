@@ -114,10 +114,17 @@ body {
   grid-row: 12 / 16;
 }
 .main-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   grid-column: 7 / 15;
   grid-row: 2 / 16;
   background-color: gray;
   overflow: auto;
+  white-space: pre-wrap;
+}
+.main-content > h1 {
+  font-size: 10em;
 }
 .portrait {
   margin-top: 15px;
