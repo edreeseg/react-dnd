@@ -94,14 +94,11 @@ body {
   grid-column: 4 / 6;
   grid-row: 7 / 11;
 }
-.skill-button > h4 {
-  width: 70%;
-}
 .nav3 {
   grid-column: 4 / 6;
   grid-row: 12 / 16;
 }
-.nav4 {
+.roll-button {
   grid-column: 16 / 18;
   grid-row: 2 / 6;
 }

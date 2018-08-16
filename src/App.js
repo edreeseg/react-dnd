@@ -10,52 +10,46 @@ class App extends Component {
       sidebarActive: false,
       skillButtonActive: false,
       skillButtonTitle: "SKILLS",
+      skillButtonFont: 1,
       STR: 12,
       DEX: 15,
       CON: 10,
       INT: 12,
       WIS: 9,
       CHA: 18,
-      SkillAcrobatics: "+2",
-      SkillAnimalHandling: "-1",
-      SkillArcana: "+1",
-      SkillAthletics: "+1",
-      SkillDeception: "+4",
-      SkillHistory: "+1",
-      SkillInsight: "-1",
-      SkillIntimidation: "+4",
-      SkillInvestigation: "+1",
-      SkillMedicine: "-1",
-      SkillNature: "+1",
-      SkillPerception: "-1",
-      SkillPerformance: "+4",
-      SkillPersuasion: "+4",
-      SkillReligion: "+1",
-      SkillSleightOfHand: "+2",
-      SkillStealth: "+2",
-      SkillSurvival: "-1"
+      SKILLAcrobatics: "+2",
+      SKILLAnimalHandling: "-1",
+      SKILLArcana: "+1",
+      SKILLAthletics: "+1",
+      SKILLDeception: "+4",
+      SKILLHistory: "+1",
+      SKILLInsight: "-1",
+      SKILLIntimidation: "+4",
+      SKILLInvestigation: "+1",
+      SKILLMedicine: "-1",
+      SKILLNature: "+1",
+      SKILLPerception: "-1",
+      SKILLPerformance: "+4",
+      SKILLPersuasion: "+4",
+      SKILLReligion: "+1",
+      SKILLSleightOfHand: "+2",
+      SKILLStealth: "+2",
+      SKILLSurvival: "-1"
     }
+    this.roll = this.roll.bind(this);
     this.displaySkills = this.displaySkills.bind(this);
   }
   roll() { // Basic 1d20 roll function.
-    const mainContent = document.getElementsByClassName("main-content")[0];
-    mainContent.innerHTML = "";
-    const result = Math.floor(Math.random() * (20 - 1 + 1) + 1);
-    const displayedResult = document.createElement("h1");
-    displayedResult.textContent = result;
-    mainContent.appendChild(displayedResult);
+    this.setState({display: Math.floor(Math.random() * (20 - 1 + 1) + 1)});
   }
   displaySkills() { // Retrieves skill values from state and displays to main-content.
+    const main = document.getElementsByClassName("main-content")[0];
     const skillButton = document.getElementsByClassName("skill-button")[0];
-    const mainContent = document.getElementsByClassName("main-content")[0];
-    mainContent.innerHTML = "";
+    const skillArr = [];
     if (!this.state.skillButtonActive) { // Check if skills are being displayed.
-      const skillList = document.createElement("ul");
-      mainContent.appendChild(skillList);
       for (let key in this.state) {
-        const nextSkill = document.createElement("li");
-        if (/^Skill/.test(key)) {
-          let skill = key.replace(/^Skill/, "");
+        if (/^SKILL/.test(key)) {
+          let skill = key.replace(/^SKILL/, "");
         if (/^[A-Z][a-z]+([A-Z])[a-z]+/.test(skill)) {  // Check for skills with multiple words.
           let doppelSkill = skill;
           skill = "";
@@ -66,21 +60,25 @@ class App extends Component {
               skill += doppelSkill[i];
           }
         }
-          nextSkill.textContent = `${skill}: ${this.state[key]}`;
+          skillArr.push(`${skill}: ${this.state[key]}`)
           if (/Perception/.test(skill)){ // Add Passive Perception to skill button.
             this.setState({
               skillButtonActive: true,
-              skillButtonTitle: `Passive ${skill}: ${this.state[key]}`
+              skillButtonTitle: `Passive ${skill}: ${this.state[key]}`,
+              skillButtonFont: 0.65
             });
           }
-          skillList.appendChild(nextSkill);
         }
       }
+      main.style.fontSize = ".12em";
+      this.setState({display: skillArr.join("\n")})
     } else { // If being displayed, return skill button to normal and reset main-content.
-      mainContent.innerHTML = "";
+      main.style.fontSize = "1em";
       this.setState({
         skillButtonActive: false,
-        skillButtonTitle: "SKILLS"
+        skillButtonTitle: "SKILLS",
+        skillButtonFont: 1,
+        display: "TEST"
       });
     }
   }
@@ -90,7 +88,7 @@ class App extends Component {
         <Main display={this.state.display}/>
         <SideBar />
         <AbilButton />
-        <SkillButton title={this.state.skillButtonTitle} displaySkills ={this.displaySkills}/>
+        <SkillButton fontSize={this.state.skillButtonFont} title={this.state.skillButtonTitle} displaySkills ={this.displaySkills}/>
         <InvButton />
         <RollButton roll={this.roll}/>
         <HistButton />
@@ -150,7 +148,7 @@ class SkillButton extends Component {
   render() {
     return (
       <div onClick={this.props.displaySkills} className="nav-buttons skill-button">
-        <h2>{this.props.title}</h2>
+        <h2 fontSize={this.props.fontSize}>{this.props.title}</h2>
       </div>
     );
   }
@@ -173,7 +171,7 @@ class RollButton extends Component {
   }
   render() {
     return (
-      <div onClick={this.props.roll} className="nav-buttons nav4">
+      <div onClick={this.props.roll} className="nav-buttons roll-button">
         <h1>D20</h1>
       </div>
     );
