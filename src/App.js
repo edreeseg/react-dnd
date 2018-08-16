@@ -9,6 +9,7 @@ class App extends Component {
       auth: false,
       sidebarActive: false,
       skillButtonActive: false,
+      skillButtonTitle: "SKILLS",
       STR: 12,
       DEX: 15,
       CON: 10,
@@ -67,31 +68,29 @@ class App extends Component {
         }
           nextSkill.textContent = `${skill}: ${this.state[key]}`;
           if (/Perception/.test(skill)){ // Add Passive Perception to skill button.
-            skillButton.innerHTML = "";
-            const passivePerception = document.createElement("h4");
-            passivePerception.textContent = `Passive ${skill}: ${this.state[key]}`;
-            skillButton.appendChild(passivePerception);
-            this.setState({skillButtonActive: true});
+            this.setState({
+              skillButtonActive: true,
+              skillButtonTitle: `Passive ${skill}: ${this.state[key]}`
+            });
           }
           skillList.appendChild(nextSkill);
         }
       }
     } else { // If being displayed, return skill button to normal and reset main-content.
       mainContent.innerHTML = "";
-      skillButton.innerHTML = "";
-      const skillTitle = document.createElement("h2");
-      skillTitle.textContent = "SKILLS";
-      skillButton.appendChild(skillTitle);
-      this.setState({skillButtonActive: false});
+      this.setState({
+        skillButtonActive: false,
+        skillButtonTitle: "SKILLS"
+      });
     }
   }
   render() {
     return (
       <div className="container">
-        <Main />
+        <Main display={this.state.display}/>
         <SideBar />
         <AbilButton />
-        <SkillButton displaySkills ={this.displaySkills}/>
+        <SkillButton title={this.state.skillButtonTitle} displaySkills ={this.displaySkills}/>
         <InvButton />
         <RollButton roll={this.roll}/>
         <HistButton />
@@ -108,7 +107,7 @@ class Main extends Component {
   render() {
     return (
       <div className="main-content">
-        <h1>{"TEST"}</h1>
+        <h1>{this.props.display}</h1>
       </div>
     );
   }
@@ -151,7 +150,7 @@ class SkillButton extends Component {
   render() {
     return (
       <div onClick={this.props.displaySkills} className="nav-buttons skill-button">
-        <h2>SKILLS</h2>
+        <h2>{this.props.title}</h2>
       </div>
     );
   }
