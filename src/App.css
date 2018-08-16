@@ -90,11 +90,11 @@ body {
   grid-column: 4 / 6;
   grid-row: 2 / 6;
 }
-.nav2 {
+.skill-button {
   grid-column: 4 / 6;
   grid-row: 7 / 11;
 }
-.nav2 > h4 {
+.skill-button > h4 {
   width: 70%;
 }
 .nav3 {
@@ -122,9 +122,22 @@ body {
   background-color: gray;
   overflow: auto;
   white-space: pre-wrap;
+  -webkit-user-select: none; /* Safari */        
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
 }
 .main-content > h1 {
   font-size: 10em;
+}
+.main-content > ul {
+  list-style: none;
+}
+.main-content ul li {
+  margin-bottom: 5px;
+}
+.main-content ul li:last-of-type {
+  margin-bottom: 0;
 }
 .portrait {
   margin-top: 15px;

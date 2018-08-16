@@ -2,51 +2,120 @@ import React, { Component } from 'react';
 import './App.css';
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      display: "TEST",
+      auth: false,
+      sidebarActive: false,
+      skillButtonActive: false,
+      STR: 12,
+      DEX: 15,
+      CON: 10,
+      INT: 12,
+      WIS: 9,
+      CHA: 18,
+      SkillAcrobatics: "+2",
+      SkillAnimalHandling: "-1",
+      SkillArcana: "+1",
+      SkillAthletics: "+1",
+      SkillDeception: "+4",
+      SkillHistory: "+1",
+      SkillInsight: "-1",
+      SkillIntimidation: "+4",
+      SkillInvestigation: "+1",
+      SkillMedicine: "-1",
+      SkillNature: "+1",
+      SkillPerception: "-1",
+      SkillPerformance: "+4",
+      SkillPersuasion: "+4",
+      SkillReligion: "+1",
+      SkillSleightOfHand: "+2",
+      SkillStealth: "+2",
+      SkillSurvival: "-1"
+    }
+    this.displaySkills = this.displaySkills.bind(this);
+  }
+  roll() { // Basic 1d20 roll function.
+    const mainContent = document.getElementsByClassName("main-content")[0];
+    mainContent.innerHTML = "";
+    const result = Math.floor(Math.random() * (20 - 1 + 1) + 1);
+    const displayedResult = document.createElement("h1");
+    displayedResult.textContent = result;
+    mainContent.appendChild(displayedResult);
+  }
+  displaySkills() { // Retrieves skill values from state and displays to main-content.
+    const skillButton = document.getElementsByClassName("skill-button")[0];
+    const mainContent = document.getElementsByClassName("main-content")[0];
+    mainContent.innerHTML = "";
+    if (!this.state.skillButtonActive) { // Check if skills are being displayed.
+      const skillList = document.createElement("ul");
+      mainContent.appendChild(skillList);
+      for (let key in this.state) {
+        const nextSkill = document.createElement("li");
+        if (/^Skill/.test(key)) {
+          let skill = key.replace(/^Skill/, "");
+        if (/^[A-Z][a-z]+([A-Z])[a-z]+/.test(skill)) {  // Check for skills with multiple words.
+          let doppelSkill = skill;
+          skill = "";
+          for (let i = 0; i < doppelSkill.length; i++) { // Add spaces between words.
+            if (i !== 0 && /[A-Z]/.test(doppelSkill[i])) // Regex probably better option than loop.
+              skill += ` ${doppelSkill[i]}`;
+            else
+              skill += doppelSkill[i];
+          }
+        }
+          nextSkill.textContent = `${skill}: ${this.state[key]}`;
+          if (/Perception/.test(skill)){ // Add Passive Perception to skill button.
+            skillButton.innerHTML = "";
+            const passivePerception = document.createElement("h4");
+            passivePerception.textContent = `Passive ${skill}: ${this.state[key]}`;
+            skillButton.appendChild(passivePerception);
+            this.setState({skillButtonActive: true});
+          }
+          skillList.appendChild(nextSkill);
+        }
+      }
+    } else { // If being displayed, return skill button to normal and reset main-content.
+      mainContent.innerHTML = "";
+      skillButton.innerHTML = "";
+      const skillTitle = document.createElement("h2");
+      skillTitle.textContent = "SKILLS";
+      skillButton.appendChild(skillTitle);
+      this.setState({skillButtonActive: false});
+    }
+  }
   render() {
     return (
       <div className="container">
-        <SideBar />
         <Main />
-        <Nav1 />
-        <Nav2 />
-        <Nav3 />
-        <Nav4 />
-        <Nav5 />
-        <Nav6 />
+        <SideBar />
+        <AbilButton />
+        <SkillButton displaySkills ={this.displaySkills}/>
+        <InvButton />
+        <RollButton roll={this.roll}/>
+        <HistButton />
+        <MiscButton />
         <Details />
       </div>
     );
   }
 }
-
+class Main extends Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    return (
+      <div className="main-content">
+        <h1>{"TEST"}</h1>
+      </div>
+    );
+  }
+}
 class SideBar extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      active: false,
-      loggedIn: false
-    }
-    this.click = this.click.bind(this);
-  }
-  click() {
-    const sideBar = document.getElementsByClassName("sideBar")[0];
-    const loginForm = document.getElementsByClassName("loginForm")[0];
-    const arrow = document.getElementsByClassName("arrow")[0];
-    if (this.state.active === false) {
-      loginForm.style.visibility = "visible";
-      sideBar.style.width = "15%";
-      arrow.style.transform = "translateX(13vw) rotate(135deg)";
-      this.setState({
-        active: true
-      });
-    } else {
-      loginForm.style.visibility = "hidden";
-      sideBar.style.width = "2%";
-      arrow.style.transform = "rotate(-45deg)";
-      this.setState({
-        active: false
-      });
-    }
   }
   render() {
     return (
@@ -58,162 +127,87 @@ class SideBar extends Component {
           <input type="password" placeholder="Password" className="passwordLogin"></input>
           <button type="submit" className="loginButton">Login</button>
         </form>
-        <div onClick={this.click} className="arrow"></div>
+        <div className="arrow"></div>
       </div>
     );
   }
 }
-class Main extends Component {
+class AbilButton extends Component {
   constructor(props) {
-    super(props);
-    this.state = {
-    }
-    displayMainContent.roll = displayMainContent.roll.bind(this);
-    displayMainContent.skills = displayMainContent.skills.bind(this);
+    super(props)
   }
   render() {
     return (
-      <div className="main-content">
-        <h1>{this.state.content}</h1>
+      <div className="nav-buttons nav1">
+        <h2>ABILITIES</h2>
       </div>
     );
   }
 }
-class Nav1 extends Component {
+class SkillButton extends Component {
   constructor(props) {
     super(props)
-    this.state = {
-      display: "ABILITY"
-    }
-    this.click = this.click.bind(this);
-  }
-  click() {
-    if (this.state.display === "ABILITY"){
-      delete this.state.display;
-      this.setState({
-        STR: 12,
-        DEX: 15,
-        CON: 10,
-        INT: 12,
-        WIS: 9,
-        CHA: 18
-      }, () => {
-        const button = document.getElementsByClassName("nav1")[0];
-        button.innerHTML = "";
-        for (let key in this.state) {
-          let splitDiv = document.createElement("div");
-          let ability = document.createElement("b");
-          let block = document.createElement("p");
-          ability.textContent = key;
-          let score = this.state[key];
-          let modifier = Math.floor((score - 10) / 2);
-          let sign = modifier >= 0 ? "+" : "";
-          let spacer = score >= 10 ? " " : "  ";
-          block.textContent = spacer + score + "\n(" + sign + modifier + ")";
-          button.style.display = "grid";
-          button.appendChild(splitDiv);
-          splitDiv.appendChild(ability);
-          splitDiv.appendChild(block);
-        }
-      });
-    }
-    else {
-      this.setState({
-        display: "ABILITY"
-      }, () => {
-      const button = document.getElementsByClassName("nav1")[0];
-      button.innerHTML = "";
-      let test = document.createElement("h2");
-      test.textContent = this.state.display;
-      button.appendChild(test);
-      button.style.display = "flex";
-      });
-    }
   }
   render() {
     return (
-      <div onClick={this.click} className="nav-buttons nav1">
-        <h2>{this.state.display}</h2>
+      <div onClick={this.props.displaySkills} className="nav-buttons skill-button">
+        <h2>SKILLS</h2>
       </div>
     );
   }
 }
-class Nav2 extends Component {
+class InvButton extends Component {
   constructor(props) {
     super(props)
-    this.state = {
-      display: "SKILL"
-    }
-  }
-  render() {
-    return (
-      <div onClick={displayMainContent.skills} className="nav-buttons nav2">
-        <h2>{this.state.display}</h2>
-      </div>
-    );
-  }
-}
-class Nav3 extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      display: "INV"
-    }
   }
   render() {
     return (
       <div className="nav-buttons nav3">
-        <h2>{this.state.display}</h2>
+        <h2>INV</h2>
       </div>
     );
   }
 }
-class Nav4 extends Component {
+class RollButton extends Component {
   constructor(props) {
     super(props)
-    this.state = {
-      display: "D20",
-    }
   }
   render() {
     return (
-      <div onClick={displayMainContent.roll} className="nav-buttons nav4">
-        <h1>{this.state.display}</h1>
+      <div onClick={this.props.roll} className="nav-buttons nav4">
+        <h1>D20</h1>
       </div>
     );
   }
 }
-class Nav5 extends Component {
+class HistButton extends Component {
   constructor(props) {
     super(props)
-    this.state = {
-      display: "HIST"
-    }
   }
   render() {
     return (
       <div className="nav-buttons nav5">
-        <h2>{this.state.display}</h2>
+        <h2>HIST</h2>
       </div>
     );
   }
 }
-class Nav6 extends Component {
+class MiscButton extends Component {
   constructor(props) {
     super(props)
-    this.state = {
-      display: "MISC"
-    }
   }
   render() {
     return (
       <div className="nav-buttons nav6">
-        <h2>{this.state.display}</h2>
+        <h2>MISC</h2>
       </div>
     );
   }
 }
 class Details extends Component {
+  constructor(props) {
+    super(props);
+  }
   render() {
     return (
       <div className="details">
@@ -225,82 +219,6 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis iaculis at ante ac
         <p>Ut ullamcorper felis nec mi ultrices feugiat eu sit amet tortor. In ut sagittis lorem. Praesent eget egestas quam. Nunc iaculis sodales vestibulum. Mauris feugiat purus ac ultricies posuere. Nullam risus nisi, fringilla vel risus auctor, sollicitudin sollicitudin lacus. Nunc condimentum tincidunt dui vitae malesuada. Sed non odio lacus. Suspendisse eget dolor risus.</p>
       </div>
     );
-  }
-}
-
-const displayMainContent = {
-  roll: function() {
-    let mainDiv = document.getElementsByClassName("main-content")[0];
-    mainDiv.style.fontSize = "1em";
-    this.setState({
-      content: Math.floor(Math.random() * (20-1+1) + 1)
-    });
-  },
-  skills: function() {
-    let skillObj = {
-      Acrobatics: "+2",
-      AnimalHandling: "-1",
-      Arcana: "+1",
-      Athletics: "+1",
-      Deception: "+4",
-      History: "+1",
-      Insight: "-1",
-      Intimidation: "+4",
-      Investigation: "+1",
-      Medicine: "-1",
-      Nature: "+1",
-      Perception: "-1",
-      Performance: "+4",
-      Persuasion: "+4",
-      Religion: "+1",
-      SleightOfHand: "+2",
-      Stealth: "+2",
-      Survival: "-1"
-    }
-    const skillArr = [];
-    for (let key in skillObj){
-      if (key.match(/[A-Z]/g).length > 1){
-        let str = "";
-        let finalStr = "";
-        let insideWord = false;
-        for (let i = 0; i < key.length; i++){
-          if (/[A-Z]/.test(key[i]) && insideWord === true){
-            finalStr = `${finalStr}${str} `;
-            str = key[i];
-            insideWord = false;
-          } else if (i === key.length - 1) {
-            finalStr = `${finalStr}${str}${key[i]}: ${skillObj[key]}`;
-            skillArr.push(finalStr);
-          } else {
-            insideWord = true;
-            str += key[i];
-          }
-        }
-      } else {
-      skillArr.push(`${key}: ${skillObj[key]}`)
-      }
-    }
-      const mainDiv = document.getElementsByClassName("main-content")[0];
-      const skillButton = document.getElementsByClassName("nav2")[0];
-      skillButton.innerHTML = "";
-      if (!this.state.hasOwnProperty("content")){
-        this.setState({
-          content: skillArr.join("\n")
-        }, () => {
-          mainDiv.style.fontSize = "0.12em";
-        });
-        const perIndex = skillArr.findIndex(x => /Perception/.test(x));
-        const passivePerception = document.createElement("h4");
-        passivePerception.textContent = `Passive ${skillArr[perIndex]}`;
-        skillButton.appendChild(passivePerception);
-      } else {
-        this.setState({});
-        const skillTitle = document.createElement("h2");
-        skillTitle.textContent = "SKILL";
-        skillButton.appendChild(skillTitle);
-        for (let key in this.state)
-          delete this.state[key];
-      }
   }
 }
 export default App;
