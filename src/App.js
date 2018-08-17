@@ -8,9 +8,10 @@ class App extends Component {
       display: "TEST",
       auth: false,
       sidebarActive: false,
+      sidebarWidth: "2%",
       skillButtonActive: false,
       skillButtonTitle: "SKILLS",
-      skillButtonFont: 1,
+      skillButtonFont: "1.5em",
       STR: 12,
       DEX: 15,
       CON: 10,
@@ -38,13 +39,29 @@ class App extends Component {
     }
     this.roll = this.roll.bind(this);
     this.displaySkills = this.displaySkills.bind(this);
+    this.expandSidebar = this.expandSidebar.bind(this);
   }
+
+  expandSidebar() {
+    if (this.state.sidebarActive)
+      this.setState({sidebarWidth: "2%", sidebarActive: false});
+    else
+      this.setState({sidebarWidth: "15%", sidebarActive: true});
+  }
+
   roll() { // Basic 1d20 roll function.
-    this.setState({display: Math.floor(Math.random() * (20 - 1 + 1) + 1)});
+    const main = document.getElementsByClassName("main-content")[0];
+    main.style.fontSize = "1em";
+    this.setState({
+      display: Math.floor(Math.random() * (20 - 1 + 1) + 1),
+      skillButtonTitle: "SKILLS",
+      skillButtonFont: "1.5em"
+    });
   }
+
   displaySkills() { // Retrieves skill values from state and displays to main-content.
     const main = document.getElementsByClassName("main-content")[0];
-    const skillButton = document.getElementsByClassName("skill-button")[0];
+    const skillButton = document.getElementsByClassName("skill-button")[0];    
     const skillArr = [];
     if (!this.state.skillButtonActive) { // Check if skills are being displayed.
       for (let key in this.state) {
@@ -64,8 +81,8 @@ class App extends Component {
           if (/Perception/.test(skill)){ // Add Passive Perception to skill button.
             this.setState({
               skillButtonActive: true,
-              skillButtonTitle: `Passive ${skill}: ${this.state[key]}`,
-              skillButtonFont: 0.65
+              skillButtonTitle: `Passive ${skill}:\n${Number(this.state[key]) + 10}`,
+              skillButtonFont: "0.7em"
             });
           }
         }
@@ -77,18 +94,22 @@ class App extends Component {
       this.setState({
         skillButtonActive: false,
         skillButtonTitle: "SKILLS",
-        skillButtonFont: 1,
+        skillButtonFont: "1.5em",
         display: "TEST"
       });
     }
   }
+
   render() {
     return (
       <div className="container">
         <Main display={this.state.display}/>
-        <SideBar />
+        <SideBar sidebarWidth={this.state.sidebarWidth} 
+          expandSidebar={this.expandSidebar}/>
         <AbilButton />
-        <SkillButton fontSize={this.state.skillButtonFont} title={this.state.skillButtonTitle} displaySkills ={this.displaySkills}/>
+        <SkillButton fontSize={this.state.skillButtonFont} 
+          title={this.state.skillButtonTitle} 
+          displaySkills ={this.displaySkills}/>
         <InvButton />
         <RollButton roll={this.roll}/>
         <HistButton />
@@ -98,25 +119,18 @@ class App extends Component {
     );
   }
 }
-class Main extends Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
+
+const Main = (props) => {
     return (
       <div className="main-content">
-        <h1>{this.props.display}</h1>
+        <h1>{props.display}</h1>
       </div>
     );
   }
-}
-class SideBar extends Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
+
+const SideBar = (props) => {
     return (
-      <div className="sideBar">
+      <div style={{width: props.sidebarWidth}} className="sideBar">
         <h1>?</h1>
         <form className="loginForm">
           <h4>Welcome!  Login below:</h4>
@@ -124,47 +138,35 @@ class SideBar extends Component {
           <input type="password" placeholder="Password" className="passwordLogin"></input>
           <button type="submit" className="loginButton">Login</button>
         </form>
-        <div className="arrow"></div>
+        <div className="arrow" onClick={props.expandSidebar}></div>
       </div>
     );
   }
-}
-class AbilButton extends Component {
-  constructor(props) {
-    super(props)
-  }
-  render() {
+
+const AbilButton = (props) => {
     return (
       <div className="nav-buttons nav1">
         <h2>ABILITIES</h2>
       </div>
     );
   }
-}
-class SkillButton extends Component {
-  constructor(props) {
-    super(props)
-  }
-  render() {
+
+const SkillButton = (props) => {
     return (
-      <div onClick={this.props.displaySkills} className="nav-buttons skill-button">
-        <h2 fontSize={this.props.fontSize}>{this.props.title}</h2>
+      <div onClick={props.displaySkills} className="nav-buttons skill-button">
+        <h2 style={{fontSize: props.fontSize}}>{props.title}</h2>
       </div>
     );
   }
-}
-class InvButton extends Component {
-  constructor(props) {
-    super(props)
-  }
-  render() {
+
+const InvButton = () => {
     return (
       <div className="nav-buttons nav3">
         <h2>INV</h2>
       </div>
     );
   }
-}
+
 const RollButton = (props) => {
         return (
       <div onClick={props.roll} className="nav-buttons roll-button">
@@ -173,35 +175,23 @@ const RollButton = (props) => {
     );
   }
 
-class HistButton extends Component {
-  constructor(props) {
-    super(props)
-  }
-  render() {
+const HistButton = (props) => {
     return (
       <div className="nav-buttons nav5">
         <h2>HIST</h2>
       </div>
     );
   }
-}
-class MiscButton extends Component {
-  constructor(props) {
-    super(props)
-  }
-  render() {
+
+const MiscButton = (props) => {
     return (
       <div className="nav-buttons nav6">
         <h2>MISC</h2>
       </div>
     );
   }
-}
-class Details extends Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
+
+const Details = (props) => {
     return (
       <div className="details">
       <p>
@@ -213,5 +203,5 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis iaculis at ante ac
       </div>
     );
   }
-}
+
 export default App;
