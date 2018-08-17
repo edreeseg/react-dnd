@@ -165,18 +165,14 @@ class InvButton extends Component {
     );
   }
 }
-class RollButton extends Component {
-  constructor(props) {
-    super(props)
-  }
-  render() {
-    return (
-      <div onClick={this.props.roll} className="nav-buttons roll-button">
+const RollButton = (props) => {
+        return (
+      <div onClick={props.roll} className="nav-buttons roll-button">
         <h1>D20</h1>
       </div>
     );
   }
-}
+
 class HistButton extends Component {
   constructor(props) {
     super(props)
