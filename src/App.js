@@ -9,37 +9,47 @@ class App extends Component {
       auth: false,
       sidebarActive: false,
       sidebarWidth: "2%",
+      abilityButtonActive: false,
+      abilityButtonTitle: "ABILITIES",
+      abilityButtonStyle: {
+        display: "flex"
+      },
+      abilityScores: {
+        STR: 6,
+        DEX: 12,
+        CON: 12,
+        INT: 12,
+        WIS: 12,
+        CHA: 12
+      },
       skillButtonActive: false,
       skillButtonTitle: "SKILLS",
-      skillButtonFont: "1.5em",
-      STR: 12,
-      DEX: 15,
-      CON: 10,
-      INT: 12,
-      WIS: 9,
-      CHA: 18,
-      SKILLAcrobatics: "+2",
-      SKILLAnimalHandling: "-1",
-      SKILLArcana: "+1",
-      SKILLAthletics: "+1",
-      SKILLDeception: "+4",
-      SKILLHistory: "+1",
-      SKILLInsight: "-1",
-      SKILLIntimidation: "+4",
-      SKILLInvestigation: "+1",
-      SKILLMedicine: "-1",
-      SKILLNature: "+1",
-      SKILLPerception: "-1",
-      SKILLPerformance: "+4",
-      SKILLPersuasion: "+4",
-      SKILLReligion: "+1",
-      SKILLSleightOfHand: "+2",
-      SKILLStealth: "+2",
-      SKILLSurvival: "-1"
+      skillButtonStyle: {
+        fontSize: "1em"
+      },
+      SKI_Acrobatics: "+2",
+      SKI_AnimalHandling: "-1",
+      SKI_Arcana: "+1",
+      SKI_Athletics: "+1",
+      SKI_Deception: "+4",
+      SKI_History: "+1",
+      SKI_Insight: "-1",
+      SKI_Intimidation: "+4",
+      SKI_Investigation: "+1",
+      SKI_Medicine: "-1",
+      SKI_Nature: "+1",
+      SKI_Perception: "-1",
+      SKI_Performance: "+4",
+      SKI_Persuasion: "+4",
+      SKI_Religion: "+1",
+      SKI_SleightOfHand: "+2",
+      SKI_Stealth: "+2",
+      SKI_Survival: "-1"
     }
+    this.expandSidebar = this.expandSidebar.bind(this);
+    this.displayAbility = this.displayAbility.bind(this);
     this.roll = this.roll.bind(this);
     this.displaySkills = this.displaySkills.bind(this);
-    this.expandSidebar = this.expandSidebar.bind(this);
   }
 
   expandSidebar() {
@@ -49,24 +59,35 @@ class App extends Component {
       this.setState({sidebarWidth: "15%", sidebarActive: true});
   }
 
+  displayAbility() {
+    if (this.state.abilityButtonActive) {
+      this.setState({ abilityButtonActive: false });
+    }
+    else {
+      this.setState({ abilityButtonActive: true }); 
+    } 
+  }
+
   roll() { // Basic 1d20 roll function.
     const main = document.getElementsByClassName("main-content")[0];
     main.style.fontSize = "1em";
     this.setState({
       display: Math.floor(Math.random() * (20 - 1 + 1) + 1),
+      skillButtonActive: false,
       skillButtonTitle: "SKILLS",
-      skillButtonFont: "1.5em"
+      skillButtonStyle: {
+        fontSize: "1em"
+      }
     });
   }
 
   displaySkills() { // Retrieves skill values from state and displays to main-content.
     const main = document.getElementsByClassName("main-content")[0];
-    const skillButton = document.getElementsByClassName("skill-button")[0];    
     const skillArr = [];
     if (!this.state.skillButtonActive) { // Check if skills are being displayed.
       for (let key in this.state) {
-        if (/^SKILL/.test(key)) {
-          let skill = key.replace(/^SKILL/, "");
+        if (/^SKI_/.test(key)) {
+          let skill = key.replace(/^SKI_/, "");
         if (/^[A-Z][a-z]+([A-Z])[a-z]+/.test(skill)) {  // Check for skills with multiple words.
           let doppelSkill = skill;
           skill = "";
@@ -82,7 +103,10 @@ class App extends Component {
             this.setState({
               skillButtonActive: true,
               skillButtonTitle: `Passive ${skill}:\n${Number(this.state[key]) + 10}`,
-              skillButtonFont: "0.7em"
+              skillButtonStyle: {
+                fontSize: "0.6em",
+                textAlign: "center"
+              }
             });
           }
         }
@@ -94,7 +118,9 @@ class App extends Component {
       this.setState({
         skillButtonActive: false,
         skillButtonTitle: "SKILLS",
-        skillButtonFont: "1.5em",
+        skillButtonStyle: {
+          fontSize: "1em"
+        },
         display: "TEST"
       });
     }
@@ -103,18 +129,32 @@ class App extends Component {
   render() {
     return (
       <div className="container">
-        <Main display={this.state.display}/>
+
+        <Main display={this.state.display} />
+
         <SideBar sidebarWidth={this.state.sidebarWidth} 
-          expandSidebar={this.expandSidebar}/>
-        <AbilButton />
-        <SkillButton fontSize={this.state.skillButtonFont} 
+          expandSidebar={this.expandSidebar} />
+
+        <AbilButton style={this.state.abilityButtonStyle}
+          active={this.state.abilityButtonActive}
+          scores={this.state.abilityScores}
+          title={this.state.abilityButtonTitle}
+          click={this.displayAbility} />
+
+        <SkillButton style={this.state.skillButtonStyle} 
           title={this.state.skillButtonTitle} 
-          displaySkills ={this.displaySkills}/>
+          click ={this.displaySkills} />
+
         <InvButton />
-        <RollButton roll={this.roll}/>
+
+        <RollButton roll={this.roll} />
+
         <HistButton />
+
         <MiscButton />
+
         <Details />
+
       </div>
     );
   }
@@ -144,17 +184,71 @@ const SideBar = (props) => {
   }
 
 const AbilButton = (props) => {
+  const strMod = props.scores.STR >= 10 ? `+${Math.floor((props.scores.STR - 10) / 2)}` 
+  : Math.floor((props.scores.STR - 10) / 2);
+  const dexMod = props.scores.DEX >= 10 ? `+${Math.floor((props.scores.DEX - 10) / 2)}` 
+  : Math.floor((props.scores.DEX - 10) / 2);
+  const conMod = props.scores.CON >= 10 ? `+${Math.floor((props.scores.CON - 10) / 2)}` 
+  : Math.floor((props.scores.CON - 10) / 2);
+  const intMod = props.scores.INT >= 10 ? `+${Math.floor((props.scores.INT - 10) / 2)}` 
+  : Math.floor((props.scores.INT - 10) / 2);
+  const wisMod = props.scores.WIS >= 10 ? `+${Math.floor((props.scores.WIS - 10) / 2)}` 
+  : Math.floor((props.scores.WIS - 10) / 2);
+  const chaMod = props.scores.CHA >= 10 ? `+${Math.floor((props.scores.CHA - 10) / 2)}` 
+  : Math.floor((props.scores.CHA - 10) / 2);
+
+  if (!props.active) {
     return (
-      <div className="nav-buttons nav1">
-        <h2>ABILITIES</h2>
+      <div onClick={props.click}
+      className="nav-buttons ability-button">
+        <h2>{props.title}</h2>
       </div>
     );
+  } else {
+    return (
+    <div onClick={props.click}
+    className="ability-container nav-buttons ability-button">
+      <div>
+        <h4>STR</h4>
+        <p>{props.scores.STR}</p>
+        <p>{strMod}</p>
+      </div>
+      <div>
+        <h4>DEX</h4>
+        <p>{props.scores.DEX}</p>
+        <p>{dexMod}</p>
+      </div>
+      <div>
+        <h4>CON</h4>
+        <p>{props.scores.CON}</p>
+        <p>{conMod}</p>
+      </div>
+      <div>
+        <h4>INT</h4>
+        <p>{props.scores.DEX}</p>
+        <p>{intMod}</p>
+      </div>
+      <div>
+        <h4>WIS</h4>
+        <p>{props.scores.WIS}</p>
+        <p>{wisMod}</p>
+      </div>
+      <div>
+        <h4>CHA</h4>
+        <p>{props.scores.DEX}</p>
+        <p>{chaMod}</p>
+      </div>
+    </div>
+    );
   }
+}
 
 const SkillButton = (props) => {
     return (
-      <div onClick={props.displaySkills} className="nav-buttons skill-button">
-        <h2 style={{fontSize: props.fontSize}}>{props.title}</h2>
+      <div style={props.style} 
+      onClick={props.click} 
+      className="nav-buttons skill-button">
+        <h2>{props.title}</h2>
       </div>
     );
   }
