@@ -80,7 +80,7 @@ class App extends Component {
       }
     });
   }
-
+ 
   displaySkills() { // Retrieves skill values from state and displays to main-content.
     const main = document.getElementsByClassName("main-content")[0];
     const skillArr = [];
